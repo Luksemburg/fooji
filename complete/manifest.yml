@@ -6,3 +6,14 @@ applications:
   host: rest-service
   domain: guides.spring.io
   path: build/libs/gs-rest-service-0.1.0.jar
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fooji
+    username: foo_user
+    password: beta
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
