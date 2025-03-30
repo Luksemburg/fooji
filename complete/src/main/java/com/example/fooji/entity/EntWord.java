@@ -2,6 +2,7 @@ package com.example.fooji.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "voc_n5")
 public class EntWord {
 
     @Id
