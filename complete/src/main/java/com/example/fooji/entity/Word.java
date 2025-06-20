@@ -1,9 +1,13 @@
 package com.example.fooji.entity;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
-@Table(name = "voc_n5")
-public class EntWord {
+@Table(name = "voc_n5", schema = "vocabulary")
+public class Word implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
