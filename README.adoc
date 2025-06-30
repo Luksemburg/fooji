@@ -1,1 +1,1 @@
-Stollen example from Spring Team
+Simple app for me to learn Japanese words (server)

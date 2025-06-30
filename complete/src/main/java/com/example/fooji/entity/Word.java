@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "voc_n5", schema = "vocabulary")
+@Table(name = "jlpt_n5_vocab", schema = "public")
 public class Word implements Serializable {
 
     private static final long serialVersionUID = 1L;

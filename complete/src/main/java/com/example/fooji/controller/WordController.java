@@ -44,4 +44,5 @@ public class WordController {
     public List<Word> getRandomWords(@RequestParam(defaultValue = "4") int limit) {
         return wordService.getRandomWords(limit);
     }
+
 }
