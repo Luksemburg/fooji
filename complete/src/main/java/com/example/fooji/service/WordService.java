@@ -30,6 +30,11 @@ public class WordService {
         return wordRepository.findById(id);
     }
 
+    public List<Word> getRandomWordsKanjiOnly(int limit) {
+        log.info("findRandomWordsKanjiOnly by Limit: {}", limit);
+        return wordRepository.findRandomWordsKanjiOnly(limit);
+    }
+
     // For testing without DB (optional)
     /*public Optional<Word> mockWord(Long id) {
         Word ent = new Word();

@@ -41,8 +41,13 @@ public class WordController {
     }
 
     @GetMapping("/random")
-    public List<Word> getRandomWords(@RequestParam(defaultValue = "4") int limit) {
-        return wordService.getRandomWords(limit);
+    public List<Word> getRandomWords(@RequestParam(defaultValue = "4") int limit, @RequestParam(defaultValue = "mixed") String mode,
+                                     @RequestParam(defaultValue = "[5,0,0,0,0]") int[] vocabulary) {
+        if(mode.equals("translate")) {
+            return wordService.getRandomWords(limit);
+        }else{
+            return wordService.getRandomWordsKanjiOnly(limit);
+        }
     }
 
 }

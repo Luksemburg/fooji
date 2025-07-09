@@ -14,4 +14,8 @@ public interface WordRepository extends JpaRepository<Word, Long> {
     // Get N random words using native SQL
     @Query(value = "SELECT * FROM public.jlpt_n5_vocab ORDER BY random() LIMIT :limit", nativeQuery = true)
     List<Word> findRandomWords(@Param("limit") int limit);
+
+    @Query(value = "SELECT * FROM public.jlpt_n5_vocab v WHERE v.kanji <> v.hiragana ORDER BY random() LIMIT :limit",
+            nativeQuery = true)
+    List<Word> findRandomWordsKanjiOnly(@Param("limit") int limit);
 }
