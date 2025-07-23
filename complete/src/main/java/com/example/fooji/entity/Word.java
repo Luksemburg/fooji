@@ -1,12 +1,14 @@
 package com.example.fooji.entity;
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "jlpt_n5_vocab", schema = "public")
 public class Word implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

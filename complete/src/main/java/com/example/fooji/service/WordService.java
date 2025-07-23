@@ -2,11 +2,14 @@ package com.example.fooji.service;
 
 import com.example.fooji.entity.Word;
 import com.example.fooji.repository.WordRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +18,10 @@ public class WordService {
     private static final Logger log = LoggerFactory.getLogger(WordService.class);
 
     private final WordRepository wordRepository;
+    private final String[] levels = {"jlpt_n1_vocab", "jlpt_n2_vocab", "jlpt_n3_vocab", "jlpt_n4_vocab", "jlpt_n5_vocab"};
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public WordService(WordRepository wordRepository) {
         this.wordRepository = wordRepository;
@@ -33,6 +40,48 @@ public class WordService {
     public List<Word> getRandomWordsKanjiOnly(int limit) {
         log.info("findRandomWordsKanjiOnly by Limit: {}", limit);
         return wordRepository.findRandomWordsKanjiOnly(limit);
+    }
+
+    public List<Word> getRandomWordsByVocabulary(List<Boolean> vocabulary, int limit) {
+
+        List<String> includedTables = new ArrayList<>();
+        for (int i = 0; i < vocabulary.size(); i++) {
+            if (vocabulary.get(i)) includedTables.add(levels[i]);
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM (");
+        for (int i = 0; i < includedTables.size(); i++) {
+            if (i > 0) {
+                sb.append(" UNION ALL ");
+            }
+            sb.append("SELECT * FROM ").append(includedTables.get(i));
+        }
+        sb.append(") AS all_vocab ORDER BY random() LIMIT ").append(limit);
+        log.info("----- query ----- {}", sb);
+
+        //return wordRepository.findRandomWordsByVocabulary(sb.toString());
+        return entityManager.createNativeQuery(sb.toString(), Word.class).getResultList();
+    }
+
+    public List<Word> getRandomWordsKanjiOnlyByVocabulary(List<Boolean> vocabulary, int limit) {
+
+        List<String> includedTables = new ArrayList<>();
+        for (int i = 0; i < vocabulary.size(); i++) {
+            if (vocabulary.get(i)) includedTables.add(levels[i]);
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM (");
+        for (int i = 0; i < includedTables.size(); i++) {
+            if (i > 0) {
+                sb.append(" UNION ALL ");
+            }
+            sb.append(" SELECT * FROM ").append(includedTables.get(i)).append(" WHERE kanji <> hiragana ");
+        }
+        sb.append(") AS all_vocab ORDER BY random() LIMIT ").append(limit);
+        log.info("----- query 2 ----- {}", sb);
+
+        //return wordRepository.findRandomWordsKanjiOnlyByVocabulary(sb.toString());
+        return entityManager.createNativeQuery(sb.toString(), Word.class).getResultList();
     }
 
     // For testing without DB (optional)

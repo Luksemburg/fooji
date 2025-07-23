@@ -42,11 +42,13 @@ public class WordController {
 
     @GetMapping("/random")
     public List<Word> getRandomWords(@RequestParam(defaultValue = "4") int limit, @RequestParam(defaultValue = "mixed") String mode,
-                                     @RequestParam(defaultValue = "[5,0,0,0,0]") int[] vocabulary) {
+                                     @RequestParam(defaultValue = "false,false,false,false,true") List<Boolean> vocabulary) {
         if(mode.equals("translate")) {
-            return wordService.getRandomWords(limit);
+            return wordService.getRandomWordsByVocabulary(vocabulary, limit);
+            //return wordService.getRandomWords(limit);
         }else{
-            return wordService.getRandomWordsKanjiOnly(limit);
+            return wordService.getRandomWordsKanjiOnlyByVocabulary(vocabulary, limit);
+            //return wordService.getRandomWordsKanjiOnly(limit);
         }
     }
 
