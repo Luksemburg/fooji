@@ -1,9 +1,11 @@
 package com.example.fooji.controller;
 
 import com.example.fooji.entity.Word;
+import com.example.fooji.enums.Modes;
 import com.example.fooji.service.WordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +25,11 @@ public class WordController {
         this.wordService = wordService;
     }
 
-    /*@GetMapping
-    public Optional<EntWord> getRandomWord() {
-        return service.getRandomWord();
-    }*/
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("name", "Fooji");
+        return "index";
+    }
 
     @GetMapping
     public Optional<Word> getById(@RequestParam Long id) {
@@ -43,11 +46,11 @@ public class WordController {
     @GetMapping("/random")
     public List<Word> getRandomWords(@RequestParam(defaultValue = "4") int limit, @RequestParam(defaultValue = "mixed") String mode,
                                      @RequestParam(defaultValue = "false,false,false,false,true") List<Boolean> vocabulary) {
-        if(mode.equals("translate")) {
-            return wordService.getRandomWordsByVocabulary(vocabulary, limit);
+        if(mode.equalsIgnoreCase(Modes.TRANSLATE.getDescription())) {
+            return wordService.getRandomWordsByVocabulary(vocabulary, Math.abs(limit));
             //return wordService.getRandomWords(limit);
         }else{
-            return wordService.getRandomWordsKanjiOnlyByVocabulary(vocabulary, limit);
+            return wordService.getRandomWordsKanjiOnlyByVocabulary(vocabulary, Math.abs(limit));
             //return wordService.getRandomWordsKanjiOnly(limit);
         }
     }
