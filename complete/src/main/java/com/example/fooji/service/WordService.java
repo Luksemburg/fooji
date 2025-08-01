@@ -49,14 +49,23 @@ public class WordService {
             if (vocabulary.get(i)) includedTables.add(levels[i]);
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM (");
+        sb.append("WITH vocab AS (");
         for (int i = 0; i < includedTables.size(); i++) {
-            if (i > 0) {
+            sb.append("SELECT * FROM ").append(includedTables.get(i));
+            if (i < includedTables.size() - 1) {
                 sb.append(" UNION ALL ");
             }
-            sb.append("SELECT * FROM ").append(includedTables.get(i));
+
         }
-        sb.append(") AS all_vocab ORDER BY random() LIMIT ").append(limit);
+        sb.append(")\n" +
+                "SELECT id, hiragana, kanji, alternative,\n" +
+                "       CASE\n" +
+                "         WHEN rand_value < 0.5 OR alternative IS NULL THEN english\n" +
+                "         ELSE alternative\n" +
+                "       END AS english\n" +
+                "FROM (\n" +
+                "    SELECT *, RANDOM() AS rand_value\n" +
+                "    FROM vocab) AS all_vocab ORDER BY random() LIMIT ").append(limit);
         log.info("----- query ----- {}", sb);
 
         //return wordRepository.findRandomWordsByVocabulary(sb.toString());
@@ -70,14 +79,23 @@ public class WordService {
             if (vocabulary.get(i)) includedTables.add(levels[i]);
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM (");
+        sb.append("WITH vocab AS (");
         for (int i = 0; i < includedTables.size(); i++) {
-            if (i > 0) {
+            sb.append("SELECT * FROM ").append(includedTables.get(i));
+            if (i < includedTables.size() - 1) {
                 sb.append(" UNION ALL ");
             }
-            sb.append(" SELECT * FROM ").append(includedTables.get(i)).append(" WHERE kanji <> hiragana ");
+            sb.append(" WHERE kanji <> hiragana ");
         }
-        sb.append(") AS all_vocab ORDER BY random() LIMIT ").append(limit);
+        sb.append(")\n" +
+                "SELECT id, hiragana, kanji, alternative,\n" +
+                "       CASE\n" +
+                "         WHEN rand_value < 0.5 OR alternative IS NULL THEN english\n" +
+                "         ELSE alternative\n" +
+                "       END AS english\n" +
+                "FROM (\n" +
+                "    SELECT *, RANDOM() AS rand_value\n" +
+                "    FROM vocab) AS all_vocab ORDER BY random() LIMIT ").append(limit);
         log.info("----- query 2 ----- {}", sb);
 
         //return wordRepository.findRandomWordsKanjiOnlyByVocabulary(sb.toString());
