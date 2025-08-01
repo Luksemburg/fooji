@@ -85,7 +85,6 @@ public class WordService {
             if (i < includedTables.size() - 1) {
                 sb.append(" UNION ALL ");
             }
-            sb.append(" WHERE kanji <> hiragana ");
         }
         sb.append(")\n" +
                 "SELECT id, hiragana, kanji, alternative,\n" +
@@ -95,7 +94,7 @@ public class WordService {
                 "       END AS english\n" +
                 "FROM (\n" +
                 "    SELECT *, RANDOM() AS rand_value\n" +
-                "    FROM vocab) AS all_vocab ORDER BY random() LIMIT ").append(limit);
+                "    FROM vocab) AS all_vocab WHERE kanji <> hiragana ORDER BY random() LIMIT ").append(limit);
         log.info("----- query 2 ----- {}", sb);
 
         //return wordRepository.findRandomWordsKanjiOnlyByVocabulary(sb.toString());
