@@ -1,5 +1,7 @@
 package com.example.fooji.util;
 
+import org.springframework.stereotype.Service;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -7,6 +9,7 @@ import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+@Service
 public class PasswordUtils {
 
     private static final int ITERATIONS = 10000;
