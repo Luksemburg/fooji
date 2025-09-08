@@ -42,6 +42,16 @@ public class User {
     @Column(name = "is_notify", nullable = false)
     private Boolean isNotify;
 
+    private Long inviteCode;
+
+    public Long getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(Long inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
     // Constructors
     public User() {}
 

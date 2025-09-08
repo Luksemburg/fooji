@@ -4,6 +4,7 @@ import com.example.fooji.entity.LoginRequest;
 import com.example.fooji.entity.LoginResponse;
 import com.example.fooji.entity.User;
 import com.example.fooji.service.LoginService;
+import com.example.fooji.service.UserService;
 import com.example.fooji.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +21,13 @@ public class LoginController {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     private final LoginService loginService;
+    private final UserService userService;
     private final JwtUtil jwtUtil;
 
-    public LoginController(LoginService loginService, JwtUtil jwtUtil){
+    public LoginController(LoginService loginService, JwtUtil jwtUtil, UserService userService){
         this.loginService = loginService;
         this.jwtUtil = jwtUtil;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -34,4 +37,13 @@ public class LoginController {
 
         return ResponseEntity.ok(new LoginResponse(token, user));
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody User requestUser) {
+        User user = userService.createUser(requestUser);
+        return ResponseEntity.ok(user);
+    }
+
+
+
 }

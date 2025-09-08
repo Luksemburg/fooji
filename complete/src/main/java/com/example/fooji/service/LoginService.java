@@ -20,7 +20,7 @@ public class LoginService {
     User mockUser = new User();
 
     public User authenticate(LoginRequest request) {
-        //query from DB
+        //TODO: query from DB
         if ("user".equals(request.getUsername()) && "pass".equals(request.getPassword())) {
             return new User();
         }

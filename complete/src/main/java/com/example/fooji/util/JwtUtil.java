@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Service
 public class JwtUtil {
-    private static final String SECRET_KEY = "uPqvJQFJzvJhxLXTJ7Wz6DHsa1mR1XNUhz7iIa3OKh8=";  // keep safe!
+    private static final String SECRET_KEY = "uPqvJQFJzvJhxLXTJ7Wz6DHsa1mR1XNUhz7iIa3OKh8=";  // mock
 
     public String generateToken(User user) {
         //long expirationTime = 1000 * 60 * 60 * 10; // 10 hours
