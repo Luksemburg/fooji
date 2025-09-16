@@ -2,10 +2,12 @@ package com.example.fooji.service;
 
 import com.example.fooji.entity.LoginRequest;
 import com.example.fooji.entity.User;
+import com.example.fooji.repository.UserRepository;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,12 +21,18 @@ public class LoginService {
     @JoinColumn(name = "user_id")
     User mockUser = new User();
 
+    @Autowired
+    private UserRepository userRepository;
+
     public User authenticate(LoginRequest request) {
-        //TODO: query from DB
-        if ("user".equals(request.getUsername()) && "pass".equals(request.getPassword())) {
-            return new User();
+
+        User user = userRepository.findByUsername(request.getUsername());
+
+        if (user.getPassword().equals(request.getPassword())) {
+            return user;
         }
 
+        /*
         mockUser.setActive(true);
         mockUser.setEmail("test@test.mail");
         mockUser.setGender("male");
@@ -37,9 +45,9 @@ public class LoginService {
         mockUser.setCreatedAt(LocalDateTime.now());
         mockUser.setUpdatedAt(LocalDateTime.now());
 
-        return mockUser;
+        return mockUser;*/
 
-        //throw new RuntimeException("Invalid username or password");
+        throw new RuntimeException("Invalid username or password");
     }
 
 }

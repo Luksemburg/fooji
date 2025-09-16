@@ -8,6 +8,19 @@ import java.time.LocalDateTime;
 @Table(name = "users", schema = "public")
 public class User {
 
+    @PrePersist
+    protected void onCreate(){
+        if(createdAt == null){
+            createdAt = LocalDateTime.now();
+        }
+        if(isActive == null){
+            isActive = true;
+        }
+        if(isNotify == null){
+            isNotify = true;
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
