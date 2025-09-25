@@ -28,6 +28,10 @@ public class LoginService {
 
         User user = userRepository.findByUsername(request.getUsername());
 
+        if(user == null){
+            throw new RuntimeException("User does not exist");
+        }
+
         if (user.getPassword().equals(request.getPassword())) {
             return user;
         }
