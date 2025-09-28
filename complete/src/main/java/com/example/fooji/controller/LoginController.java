@@ -8,6 +8,7 @@ import com.example.fooji.service.UserService;
 import com.example.fooji.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +36,10 @@ public class LoginController {
         User user = loginService.authenticate(loginRequest);
         String token = jwtUtil.generateToken(user);
 
-        return ResponseEntity.ok(new LoginResponse(token, user));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+        return ResponseEntity.ok().headers(headers).body(new LoginResponse(token, user));
     }
 
     @PostMapping("/register")
