@@ -43,9 +43,14 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User requestUser) {
+    public ResponseEntity<?> register(@RequestBody User requestUser) {
         User user = userService.createUser(requestUser);
-        return ResponseEntity.ok(user);
+        String token = jwtUtil.generateToken(user);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+        return ResponseEntity.ok().headers(headers).body(new LoginResponse(token, user));
     }
 
 
