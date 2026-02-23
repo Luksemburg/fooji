@@ -6,6 +6,9 @@ import com.example.fooji.entity.User;
 import com.example.fooji.service.LoginService;
 import com.example.fooji.service.UserService;
 import com.example.fooji.util.JwtUtil;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/login")
@@ -40,6 +45,30 @@ public class LoginController {
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
         return ResponseEntity.ok().headers(headers).body(new LoginResponse(token, user));
+    }
+
+    @PostMapping("/googleLogin")
+    public ResponseEntity<?> googleLogin(@RequestBody LoginRequest loginRequest) {
+
+        /*GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                new NetHttpTransport(),
+                new JacksonFactory())
+                .setAudience(Collections.singletonList("YOUR_WEB_CLIENT_ID"))
+                .build();
+
+        GoogleIdToken idToken = verifier.verify(loginRequest.getID-TOKEN);*/
+        return null;
+
+        /*User user = loginService.authenticate(loginRequest);
+        String token = jwtUtil.generateToken(user);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+        return ResponseEntity.ok().headers(headers).body(new LoginResponse(token, user));*/
+
+        /*log.info("===== googleLogin ===== {}", request.toString());
+        return null;*/
     }
 
     @PostMapping("/register")
