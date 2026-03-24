@@ -19,4 +19,8 @@ public class UserService {
         userRepository.save(requestUser);
         return requestUser;
     }
+
+    public User findByGoogleId(String googleId) {
+        return userRepository.findByGoogleId(googleId);
+    }
 }

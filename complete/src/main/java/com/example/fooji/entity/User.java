@@ -52,6 +52,8 @@ public class User {
 
     private String location;
 
+    private String googleId;
+
     @Column(name = "is_notify", nullable = false)
     private Boolean isNotify;
 
@@ -162,5 +164,13 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 }
