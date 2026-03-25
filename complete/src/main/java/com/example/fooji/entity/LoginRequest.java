@@ -1,9 +1,5 @@
 package com.example.fooji.entity;
 
-import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
-
-
 public class LoginRequest {
 
     /*@Id

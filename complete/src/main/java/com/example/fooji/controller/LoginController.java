@@ -1,9 +1,6 @@
 package com.example.fooji.controller;
 
-import com.example.fooji.entity.LoginRequest;
-import com.example.fooji.entity.LoginResponse;
-import com.example.fooji.entity.User;
-import com.example.fooji.entity.UserDTO;
+import com.example.fooji.entity.*;
 import com.example.fooji.service.LoginService;
 import com.example.fooji.service.UserService;
 import com.example.fooji.util.JwtUtil;
@@ -17,13 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @RestController
@@ -54,7 +49,7 @@ public class LoginController {
     }
 
     @PostMapping("/googleLogin")
-    public ResponseEntity<?> googleLogin(@RequestBody String clientId) {
+    public ResponseEntity<?> googleLogin(@RequestParam String clientId) {
 
         log.info(" ===== googleLogin ===== ");
         //log.info(" ===== Client Request: " + googleId + " ===== " );
@@ -78,6 +73,8 @@ public class LoginController {
 
         GoogleIdToken.Payload payload = idToken.getPayload();
 
+        log.info(" ===== PayLoad ===== {}", payload);
+
         String googleId = payload.getSubject();   // stable ID
         String email = payload.getEmail();
         String name = (String) payload.get("name");
@@ -94,6 +91,10 @@ public class LoginController {
             user.setGoogleId(googleId);
             user.setEmail(email);
             user.setUsername(name);
+            user.setNotify(true);
+            user.setActive(true);
+            user.setPassword("mock");
+            user.setCreatedAt(LocalDateTime.now());
 
             userService.createUser(user);
         }
