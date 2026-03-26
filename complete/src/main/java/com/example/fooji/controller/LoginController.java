@@ -45,7 +45,14 @@ public class LoginController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
-        return ResponseEntity.ok().headers(headers).body(new LoginResponse(token, user));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhone(user.getPhone());
+        userDTO.setLocation(user.getLocation());
+        userDTO.setGender(user.getGender());
+
+        return ResponseEntity.ok().headers(headers).body(userDTO);
     }
 
     @PostMapping("/googleLogin")
@@ -100,14 +107,15 @@ public class LoginController {
         }
 
         String jwt = jwtUtil.generateToken(user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setJwt(jwt);
         userDTO.setUsername(name);
         userDTO.setEmail(email);
         userDTO.setGoogleId(googleId);
 
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok().headers(headers).body(userDTO);
     }
 
     @PostMapping("/register")
