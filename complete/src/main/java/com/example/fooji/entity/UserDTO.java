@@ -14,8 +14,6 @@ public class UserDTO {
 
     private String location;
 
-    private String googleId;
-
     private Long inviteCode;
 
     public Long getInviteCode() {
@@ -78,14 +76,6 @@ public class UserDTO {
         this.username = username;
     }
 
-    public String getGoogleId() {
-        return googleId;
-    }
-
-    public void setGoogleId(String googleId) {
-        this.googleId = googleId;
-    }
-
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -95,7 +85,6 @@ public class UserDTO {
                 ", phone=" + phone +
                 ", gender='" + gender + '\'' +
                 ", location='" + location + '\'' +
-                ", googleId='" + googleId + '\'' +
                 ", inviteCode=" + inviteCode +
                 '}';
     }

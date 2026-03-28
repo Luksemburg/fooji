@@ -113,7 +113,6 @@ public class LoginController {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(name);
         userDTO.setEmail(email);
-        userDTO.setGoogleId(googleId);
 
         return ResponseEntity.ok().headers(headers).body(userDTO);
     }
