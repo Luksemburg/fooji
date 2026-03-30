@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -22,5 +24,19 @@ public class UserService {
 
     public User findByGoogleId(String googleId) {
         return userRepository.findByGoogleId(googleId);
+    }
+
+    public Boolean save(User user) {
+        try{
+            userRepository.save(user);
+            return true;
+        }catch (Throwable t){
+            t.printStackTrace();
+        }
+        return false;
+    }
+
+    public User findUserById(Long id) {
+        return userRepository.findUserById(id);
     }
 }
