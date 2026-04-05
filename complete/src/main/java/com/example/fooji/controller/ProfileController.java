@@ -21,7 +21,7 @@ public class ProfileController {
     @Autowired
     UserService userService;
 
-    //TODO check signature, password hash, should be email editable?
+    //TODO check signature, password hash
     @PostMapping("/save")
     public Boolean save(UserDTO userDTO, @AuthenticationPrincipal CustomUserDetails customUser) {
 
@@ -31,7 +31,7 @@ public class ProfileController {
         user.setPhone(userDTO.getPhone());
         user.setLocation(userDTO.getLocation());
         user.setGender(userDTO.getGender());
-        user.setEmail(userDTO.getEmail());
+        //user.setEmail(userDTO.getEmail());
 
         return(userService.save(user));
     }
