@@ -7,7 +7,9 @@ import com.example.fooji.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,11 @@ public class ProfileController {
     //TODO check signature, password hash
     @PostMapping("/save")
     public Boolean save(UserDTO userDTO, @AuthenticationPrincipal CustomUserDetails customUser) {
+
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        log.info(" ==== ProfileController:auth ==== {}", auth);
 
         User user = userService.findUserById(customUser.getId());
         user.setPassword(userDTO.getPassword());

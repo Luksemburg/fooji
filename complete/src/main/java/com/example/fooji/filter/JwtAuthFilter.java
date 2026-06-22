@@ -1,11 +1,14 @@
 package com.example.fooji.filter;
 
+import com.example.fooji.controller.ProfileController;
 import com.example.fooji.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +19,8 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthFilter.class);
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -48,9 +53,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                 userDetails.getAuthorities()
                         );
 
+                //log.info(" ==== JwtAuthFilter:auth ==== {}", auth);
+
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
             } catch (Exception e) {
+                e.printStackTrace();
                 // invalid token → ignore or log
             }
         }
