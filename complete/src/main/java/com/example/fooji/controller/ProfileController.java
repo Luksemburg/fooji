@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,23 +24,46 @@ public class ProfileController {
     @Autowired
     UserService userService;
 
-    //TODO check signature, password hash
+    /* TODO
+     password hash
+     check the old password
+     gender does not work
+     ID does not save on the client, so the user can edit only once
+     format check for all editable values
+     */
     @PostMapping("/save")
-    public Boolean save(UserDTO userDTO, @AuthenticationPrincipal CustomUserDetails customUser) {
+    public User save(@RequestBody UserDTO userDTO, @AuthenticationPrincipal CustomUserDetails customUser) {
 
         Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
 
         log.info(" ==== ProfileController:auth ==== {}", auth);
+        log.info(" ==== ProfileController:userDTO ==== {}", userDTO);
 
         User user = userService.findUserById(customUser.getId());
-        user.setPassword(userDTO.getPassword());
-        user.setUsername(userDTO.getUsername());
-        user.setPhone(userDTO.getPhone());
-        user.setLocation(userDTO.getLocation());
-        user.setGender(userDTO.getGender());
+        if(userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
+            user.setPassword(userDTO.getPassword());
+        }
+        if(userDTO.getUsername() != null && !userDTO.getUsername().isBlank()) {
+            user.setUsername(userDTO.getUsername());
+        }
+        if(userDTO.getPhone() != null) {
+            user.setPhone(userDTO.getPhone());
+        }
+        if(userDTO.getLocation() != null && !userDTO.getLocation().isBlank()) {
+            user.setLocation(userDTO.getLocation());
+        }
+        if(userDTO.getGender() != null && !userDTO.getGender().isBlank()) {
+            user.setGender(userDTO.getGender());
+        }
         //user.setEmail(userDTO.getEmail());
 
-        return(userService.save(user));
+        try {
+            userService.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return(user);
     }
 }

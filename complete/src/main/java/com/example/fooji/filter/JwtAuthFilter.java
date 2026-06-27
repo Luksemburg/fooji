@@ -40,7 +40,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             try {
                 Claims claims = jwtUtil.parseToken(token);
 
-                Long userId = Long.parseLong(claims.getSubject());
+                log.info(" ==== Claims ==== {}", claims);
+
+                Long userId = Long.valueOf(claims.get("id", Integer.class));
                 String email = claims.get("email", String.class);
 
                 CustomUserDetails userDetails =

@@ -170,6 +170,26 @@ public class User {
         return googleId;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", lastLoginAt=" + lastLoginAt +
+                ", isActive=" + isActive +
+                ", phone=" + phone +
+                ", gender='" + gender + '\'' +
+                ", location='" + location + '\'' +
+                ", googleId='" + googleId + '\'' +
+                ", isNotify=" + isNotify +
+                ", inviteCode=" + inviteCode +
+                '}';
+    }
+
     public void setGoogleId(String googleId) {
         this.googleId = googleId;
     }

@@ -1,7 +1,10 @@
 package com.example.fooji.util;
 
+import com.example.fooji.controller.WordController;
 import com.example.fooji.entity.User;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Jwts;
@@ -15,6 +18,8 @@ import java.util.Date;
 @Service
 public class JwtUtil {
     private static final String SECRET_KEY = "uPqvJQFJzvJhxLXTJ7Wz6DHsa1mR1XNUhz7iIa3OKh8=";  // mock
+
+    private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
 
     public String generateToken(User user) {
         //long expirationTime = 1000 * 60 * 60 * 10; // 10 hours
@@ -34,10 +39,11 @@ public class JwtUtil {
     }
 
     public Claims parseToken(String token) {
+        log.info(" ==== parseToken ==== {}", token);
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(token.substring(7))
                 .getBody();
     }
 }

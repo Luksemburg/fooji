@@ -28,6 +28,16 @@ public class UserService {
 
     public Boolean save(User user) {
         try{
+            log.info(" ==== User.save ==== {}", user);
+
+            /*User userToUpdate = userRepository.findUserById(user.getId());
+            userToUpdate.setUsername(user.getUsername());
+            userToUpdate.setPhone(user.getPhone());
+            userToUpdate.setLocation(user.getLocation());
+            userToUpdate.setGender(user.getGender());
+            userToUpdate.setPassword(user.getPassword());
+            userRepository.save(userToUpdate);*/
+
             userRepository.save(user);
             return true;
         }catch (Throwable t){
