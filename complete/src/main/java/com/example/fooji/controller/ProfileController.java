@@ -7,13 +7,16 @@ import com.example.fooji.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/profile")
@@ -22,15 +25,18 @@ public class ProfileController {
     private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
 
     @Autowired
-    UserService userService;
+    private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /* TODO
-     password hash
-     check the old password
-     gender does not work
-     ID does not save on the client, so the user can edit only once
-     format check for all editable values
-     */
+        error handling when login or edit profile
+        gender does not work
+        ID does not save on the client, so the user can edit only once
+        format check for all editable values
+        screen when two identical correct answers, but one randomly chosen as not correct
+    */
     @PostMapping("/save")
     public User save(@RequestBody UserDTO userDTO, @AuthenticationPrincipal CustomUserDetails customUser) {
 
@@ -41,6 +47,16 @@ public class ProfileController {
         log.info(" ==== ProfileController:userDTO ==== {}", userDTO);
 
         User user = userService.findUserById(customUser.getId());
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank() &&
+                userDTO.getOldPassword() != null && !userDTO.getOldPassword().isBlank() &&
+                !passwordEncoder.matches(userDTO.getOldPassword(), user.getPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Old password is incorrect"
+            );
+        }
+
         if(userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
             user.setPassword(userDTO.getPassword());
         }

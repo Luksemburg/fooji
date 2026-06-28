@@ -5,9 +5,8 @@ import com.example.fooji.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -17,7 +16,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User createUser(User requestUser) {
+        requestUser.setPassword(passwordEncoder.encode(requestUser.getPassword()));
         userRepository.save(requestUser);
         return requestUser;
     }
@@ -26,8 +29,11 @@ public class UserService {
         return userRepository.findByGoogleId(googleId);
     }
 
-    public Boolean save(User user) {
+    public void save(User user) {
         try{
+
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
             log.info(" ==== User.save ==== {}", user);
 
             /*User userToUpdate = userRepository.findUserById(user.getId());
@@ -39,11 +45,9 @@ public class UserService {
             userRepository.save(userToUpdate);*/
 
             userRepository.save(user);
-            return true;
         }catch (Throwable t){
             t.printStackTrace();
         }
-        return false;
     }
 
     public User findUserById(Long id) {
